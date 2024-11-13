@@ -1,0 +1,41 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title><%= title.charAt(0).toUpperCase() + title.slice(1) %></title>
+    <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <meta name="robots" content="index, follow">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+    <link rel="stylesheet" href="/css/main.css" />
+    <script src="/js/main.js"></script>
+  </head>
+  <body class="dark-mode">
+    
+    <main>
+      <div class="nav">
+        <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/services">Services</a></li>
+            <li><a href="/account">Account</a></li>
+        </ul>
+      </div>
+      <%- include(page) %>
+    </main>
+
+    <footer>
+      <img src="/img/dark-mode.png" id="theme-icon" alt="Theme Icon" />
+    </footer>
+  </body>
+</html>
