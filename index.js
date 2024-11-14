@@ -9,7 +9,6 @@ const nodemailer = require("nodemailer");
 const rateLimit = require("express-rate-limit");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const multer = require("multer");
 const app = express();
 
 const SECRET_KEY = process.env.SECRET_KEY;
@@ -68,7 +67,6 @@ const checkForToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY);
-
     const users = readUsers();
     const user = users.find(
       (u) => u.username === decoded.username && u.token === token
@@ -121,9 +119,9 @@ app.get("/:page?", (req, res) => {
   });
 });
 
-
 app.post("/register", async (req, res) => {
   const { email, username, password } = req.body;
+  const userIp = req.ip;
 
   if (!email || !username || !password) {
     return res
@@ -132,6 +130,7 @@ app.post("/register", async (req, res) => {
   }
 
   const users = readUsers();
+
   if (users.some((user) => user.username === username)) {
     return res
       .status(400)
@@ -142,6 +141,12 @@ app.post("/register", async (req, res) => {
     return res
       .status(400)
       .render("register", { error: "Email already exists" });
+  }
+
+  if (users.some((user) => user.ip === userIp)) {
+    return res
+      .status(400)
+      .render("register", { error: "An account has already been registered from this IP address" });
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -160,6 +165,7 @@ app.post("/register", async (req, res) => {
     password: hashedPassword,
     verificationCode,
     verified: false,
+    ip: userIp,
     created_at: new Date().toISOString(),
   };
 
@@ -196,26 +202,10 @@ app.post("/register", async (req, res) => {
   });
 });
 
-app.post("/verify", (req, res) => {
-  const { email, verificationCode } = req.body;
-  const users = readUsers();
-  const user = users.find(
-    (user) => user.email === email && user.verificationCode === verificationCode
-  );
-
-  if (!user)
-    return res
-      .status(400)
-      .json({ message: "Invalid email or verification code" });
-
-  user.verified = true;
-  writeUsers(users);
-  res.status(200).json({ message: "Email verified successfully" });
-});
-
 app.post("/login", async (req, res) => {
   const { identifier, password } = req.body;
-  
+  const userIp = req.ip;
+
   if (!identifier || !password) {
     return res
       .status(400)
@@ -225,13 +215,14 @@ app.post("/login", async (req, res) => {
   const users = readUsers();
   const user = users.find(
     (user) =>
-      (user.username === identifier || user.email === identifier)
+      (user.username === identifier || user.email === identifier) &&
+      user.ip === userIp
   );
 
   if (!user) {
     return res
       .status(400)
-      .render("login", { error: "Invalid username or email" });
+      .render("login", { error: "No account associated with this IP or incorrect credentials" });
   }
 
   if (!user.verified) {
@@ -247,7 +238,7 @@ app.post("/login", async (req, res) => {
       .render("login", { error: "Incorrect password" });
   }
 
-  const token = jwt.sign({ username: user.username, ip: req.ip }, SECRET_KEY, {
+  const token = jwt.sign({ username: user.username, ip: userIp }, SECRET_KEY, {
     expiresIn: "48h",
   });
 
@@ -260,17 +251,6 @@ app.post("/login", async (req, res) => {
     maxAge: 48 * 60 * 60 * 1000,
   });
   res.redirect("home");
-});
-
-app.post("/logout", (req, res) => {
-  res.clearCookie("token");
-  const users = readUsers();
-  const user = users.find((u) => u.username === req.user.username);
-  if (user) {
-    delete user.token;
-    writeUsers(users);
-  }
-  res.status(200).json({ message: "Logout successful" });
 });
 
 https.createServer(options, app).listen(443, () => {
