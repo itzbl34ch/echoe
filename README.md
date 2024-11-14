@@ -1,0 +1,1 @@
+ExpressJs website with dynamic routing and template rendering. Includes Login and Register, but does not include a databse connection yet. Reads user data from a json file which acts as the database for now.
