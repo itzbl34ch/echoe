@@ -9,6 +9,7 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* Responsive Navigation Bar */
 .nav {
     background-color: rgba(16, 16, 16, 1);
     margin: 1em auto;
@@ -34,7 +35,8 @@ body {
     margin: 0 10px;
 }
 
-.nav ul li a {
+.nav ul li a,
+.nav ul li a:visited { /* Keep visited links the same color as unvisited */
     text-decoration: none;
     color: #FFFFFF;
     font-size: 1rem;
@@ -52,6 +54,7 @@ body {
     color: #E76F51;
 }
 
+/* Light Mode Styles (hidden by default) */
 body.light-mode {
     background-color: rgba(255, 255, 255);
     color: #000000;
@@ -69,6 +72,7 @@ body.light-mode .nav ul li a:hover {
     color: #2C3E50;
 }
 
+/* Theme Icon for Light/Dark Toggle */
 #theme-icon {
     position: fixed;
     bottom: 20px;
@@ -78,10 +82,12 @@ body.light-mode .nav ul li a:hover {
     z-index: 1000;
 }
 
+/* Responsive Font Scaling */
 body, .nav ul li a {
     font-size: 1rem;
 }
 
+/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .nav {
         padding: 0.8em;
@@ -111,6 +117,7 @@ body, .nav ul li a {
     }
 }
 
+/* Centered Container */
 .container {
     max-width: 400px;
     margin: 5% auto;
@@ -123,6 +130,7 @@ body, .nav ul li a {
     box-sizing: border-box;
 }
 
+/* Heading Style */
 .container h1 {
     text-align: center;
     color: #F4A261;
@@ -130,6 +138,7 @@ body, .nav ul li a {
     margin-bottom: 1.2em;
 }
 
+/* Error Message */
 .error-message {
     color: #E76F51;
     font-size: 0.9rem;
@@ -137,16 +146,19 @@ body, .nav ul li a {
     margin-bottom: 1em;
 }
 
+/* Form Group */
 .form-group {
     margin-bottom: 1.5em;
 }
 
+/* Labels */
 .container label {
     font-weight: bold;
     display: block;
     margin-bottom: 0.5em;
 }
 
+/* Input Fields */
 .container input[type="text"],
 .container input[type="password"] {
     width: calc(100%);
@@ -167,6 +179,7 @@ body, .nav ul li a {
     background-color: rgba(255, 255, 255, 1);
 }
 
+/* Submit Button */
 .container button[type="submit"] {
     width: 100%;
     padding: 0.75em;
@@ -186,6 +199,7 @@ body, .nav ul li a {
     transform: scale(1.02);
 }
 
+/* Register Link */
 .container p {
     text-align: center;
     font-size: 0.9rem;
@@ -202,6 +216,7 @@ body, .nav ul li a {
     text-decoration: underline;
 }
 
+/* Responsive Design for Small Screens */
 @media (max-width: 480px) {
     .container {
         width: 90%;
